@@ -9,6 +9,7 @@ class TodosList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final todos = ref.watch(todosListState);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -16,24 +17,16 @@ class TodosList extends ConsumerWidget {
           'Fuss',
         ),
       ),
-      body: ref.watch(todosListProvider).map(
-            loading: (_) => const Center(
-              child: CircularProgressIndicator(),
-            ),
-            error: (error) => Center(
-              child: Text(error.stackTrace.toString()),
-            ),
-            data: (todos) => ListView.builder(
-              itemCount: todos.value.values.length,
-              itemBuilder: (context, index) {
-                final todo = todos.value.values[index];
-                return ListTile(
-                  title: Text(todo.title),
-                  subtitle: Text(todo.description ?? ''),
-                );
-              },
-            ),
-          ),
+      body: ListView.builder(
+        itemCount: todos.values.length,
+        itemBuilder: (context, index) {
+          final todo = todos.values[index];
+          return ListTile(
+            title: Text(todo.title),
+            subtitle: Text(todo.description ?? ''),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           context.go('/todos/new');
