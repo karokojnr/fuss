@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/model/todo.dart';
 import '../../domain/model/todos.dart';
 import '../../domain/usecases/module.dart';
 
@@ -18,6 +19,11 @@ class TodosStateNotifier extends StateNotifier<Todos> {
   Future<void> loadTodos() async {
     state = await getTodos.execute();
   }
+
+  Future<void> save(Todo todo) async {
+    await ref.read(saveTodoProvider).execute(todo);
+    await loadTodos();
+  }
 }
 
 final todosListState = StateNotifierProvider<TodosStateNotifier, Todos>(
@@ -27,3 +33,5 @@ final todosListState = StateNotifierProvider<TodosStateNotifier, Todos>(
 final todoListModel = Provider<TodosStateNotifier>((ref) {
   return ref.watch(todosListState.notifier);
 });
+
+
