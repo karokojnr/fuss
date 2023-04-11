@@ -16,7 +16,7 @@ class TodosList extends ConsumerWidget {
           'Fuss',
         ),
       ),
-      body: ref.watch(getTodosProvider).map(
+      body: ref.watch(todosListProvider).map(
             loading: (_) => const Center(
               child: CircularProgressIndicator(),
             ),
