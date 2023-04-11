@@ -21,6 +21,15 @@ class TodosList extends ConsumerWidget {
         title: const Text(
           'Fuss',
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.push('/todos/new');
+            },
+            icon: const Icon(Icons.add),
+            tooltip: 'Add Todo',
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -45,14 +54,6 @@ class TodosList extends ConsumerWidget {
                   for (final todo in completed) TodoTile(todo: todo),
                 ])
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          context.go('/todos/new');
-        },
-        icon: const Icon(Icons.add),
-        label: const Text('Add Todo'),
-        tooltip: 'Add Todo',
       ),
     );
   }
