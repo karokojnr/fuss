@@ -7,6 +7,6 @@ class DeleteTodoUseCaseImpl extends DeleteTodoUseCase {
   final TodosRepository _todoRepository;
 
   @override
-  Future<void> execute(Todo todo) async =>
-      await _todoRepository.deleteTodo(todo);
+  Future<void> execute(String todoId) async =>
+      await _todoRepository.deleteTodo(todoId);
 }

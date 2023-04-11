@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../viewmodel/module.dart';
+import '../widgets/todo_tile.dart';
 
 class TodosList extends ConsumerWidget {
   const TodosList({super.key});
@@ -10,6 +11,10 @@ class TodosList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = ref.watch(todosListState);
+
+    final active = todos.active;
+    final completed = todos.completed;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -17,15 +22,29 @@ class TodosList extends ConsumerWidget {
           'Fuss',
         ),
       ),
-      body: ListView.builder(
-        itemCount: todos.values.length,
-        itemBuilder: (context, index) {
-          final todo = todos.values[index];
-          return ListTile(
-            title: Text(todo.title),
-            subtitle: Text(todo.description ?? ''),
-          );
-        },
+      body: Column(
+        children: [
+          Expanded(
+            child: active.isEmpty
+                ? const Center(
+                    child: Text('No Todos found!'),
+                  )
+                : ListView.builder(
+                    itemCount: active.length,
+                    itemBuilder: (context, index) {
+                      final todo = active[index];
+                      return TodoTile(todo: todo);
+                    },
+                  ),
+          ),
+          if (completed.isNotEmpty)
+            ExpansionTile(
+                title: const Text('Completed'),
+                initiallyExpanded: completed.isNotEmpty,
+                children: [
+                  for (final todo in completed) TodoTile(todo: todo),
+                ])
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
